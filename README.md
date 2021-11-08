@@ -46,6 +46,12 @@ Lastly, determine what system you're using, if you want the audio to be stereo o
 This should produce an audio ROM for the original Gameboy that uses the HQ playback method in stereo at 16,384Hz\.
 Additionally, you can override the input sample rate \(to make the audio play faster or slower\) by typing in `samplerate=` and an integer\. Higher rates will play back slower, and lower rates will play back faster\.
 
+The method for calculating the maximum sample rate for SHQ audio is a bit different\. For mono audio, use the same calculation method as stereo HQ audio\. For stereo SHQ, however, it's more complicated:
+- Take the base cartridge size calculated in step 1 of HQ audio calculation and divide that by 16,384
+- Multiply that number by 5,461 \(which is the number of samples that can fit in one bank\), which will result in the number of samples that can fit on the cartridge
+- Divide that by the length of the audio in seconds, which will result in the sample rate
+- Use the timer divider calculation method I explained earlier
+
 ---
 
 #### A few things to note
