@@ -59,7 +59,7 @@ The method for calculating the maximum sample rate for SHQ audio is a bit differ
 - The maximum sample rate for Legacy and HQ is 23,831Hz on DMG, and 43,690Hz on GBC \(timer dividers of 12; div=12\)
 - The maximum sample rate for SHQ is 16,384Hz on DMG, and 32,768Hz on GBC \(timer dividers of 16; div=16\)
 - HQ and SHQ on DMG may sound a bit whiny at the sample rate due to the method I implemented for reducing noise
-- Legacy uses half as much data as raw 8-bit PCM, HQ uses the same amount of data as 8-bit PCM, and SHQ \(in stereo\) uses 3/4ths the amount of data as 16-bit PCM, but can only use 16,383 out of 16,384 bytes per ROM bank\. Consider that when choosing an audio file to encode\. However, mono SHQ uses the same amount of data as mono 16-bit PCM\.
+- Legacy uses half as much data as raw 8\-bit PCM, HQ uses the same amount of data as 8\-bit PCM, and SHQ \(in stereo\) uses 3/4ths the amount of data as 16\-bit PCM, but can only use 16,383 out of 16,384 bytes per ROM bank\. Consider that when choosing an audio file to encode\. However, mono SHQ uses the same amount of data as mono 16\-bit PCM\.
 
 ---
 
