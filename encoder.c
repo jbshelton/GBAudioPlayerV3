@@ -167,7 +167,7 @@ void generate_shq_lut(struct shq_lut_t *shq_lut)
                 if(shq_lut->amp_lut[outamp]==-1)
                 {   
                     uniqueamps++;
-                    shq_lut->pulse_lut[outamp][shq_lut->repeats[outamp]] = (uint8_t)p;
+                    shq_lut->pulse_lut[outamp][shq_lut->repeats[outamp]] = (uint8_t)7-p;
                     shq_lut->mv_lut[outamp][shq_lut->repeats[outamp]] = (uint8_t)m;
                     shq_lut->nw_lut[outamp][shq_lut->repeats[outamp]] = (((uint8_t)nw)<<2);
                     shq_lut->amp_lut[outamp] = outamp;
@@ -175,7 +175,7 @@ void generate_shq_lut(struct shq_lut_t *shq_lut)
                 else
                 {
                     shq_lut->repeats[outamp]++;
-                    shq_lut->pulse_lut[outamp][shq_lut->repeats[outamp]] = (uint8_t)p;
+                    shq_lut->pulse_lut[outamp][shq_lut->repeats[outamp]] = (uint8_t)7-p;
                     shq_lut->mv_lut[outamp][shq_lut->repeats[outamp]] = (uint8_t)m;
                     shq_lut->nw_lut[outamp][shq_lut->repeats[outamp]] = (((uint8_t)nw)<<2);
                 }
@@ -186,7 +186,7 @@ void generate_shq_lut(struct shq_lut_t *shq_lut)
                 if(shq_lut->amp_lut[outamp]==-1)
                 {   
                     uniqueamps++;
-                    shq_lut->pulse_lut[outamp][shq_lut->repeats[outamp]] = (uint8_t)p;
+                    shq_lut->pulse_lut[outamp][shq_lut->repeats[outamp]] = (uint8_t)p+8;
                     shq_lut->mv_lut[outamp][shq_lut->repeats[outamp]] = (uint8_t)m;
                     shq_lut->nw_lut[outamp][shq_lut->repeats[outamp]] = (((uint8_t)nw)<<2);
                     shq_lut->amp_lut[outamp] = outamp;
@@ -194,7 +194,7 @@ void generate_shq_lut(struct shq_lut_t *shq_lut)
                 else
                 {
                     shq_lut->repeats[outamp]++;
-                    shq_lut->pulse_lut[outamp][shq_lut->repeats[outamp]] = (uint8_t)p;
+                    shq_lut->pulse_lut[outamp][shq_lut->repeats[outamp]] = (uint8_t)p+8;
                     shq_lut->mv_lut[outamp][shq_lut->repeats[outamp]] = (uint8_t)m;
                     shq_lut->nw_lut[outamp][shq_lut->repeats[outamp]] = (((uint8_t)nw)<<2);
                 }
