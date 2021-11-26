@@ -62,13 +62,16 @@ endif
 FFMPEG := ffmpeg -loglevel warning -stats -hide_banner
 
 DURATION := $(shell ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 $(SOURCE))
+DURATION := $(shell echo "scale=1; $(DURATION) + 1" | bc -l)
+DURATION := $(shell printf "%.0f" $(DURATION))
+$(info Audio duration is ${DURATION} seconds)
 
 samples_per_rom = $(shell expr $(BANKSAMPLES) \* $(BANKS))
 
-raw_samplerate = $(shell echo "scale=6; $(samples_per_rom)/$(DURATION)" | bc -l)
-#$(info $$raw_samplerate is [${raw_samplerate}])
-div := $(shell echo "scale=6; $(TIM_BASE)/$(raw_samplerate)" | bc -l)
-#$(info $$div is [${div}])
+raw_samplerate := $(shell echo "scale=6; $(samples_per_rom)/$(DURATION)" | bc -l)
+raw_samplerate := $(shell printf "%.0f" $(raw_samplerate))
+
+div := $(shell echo "scale=1; ($(TIM_BASE)/$(raw_samplerate)) + 1" | bc -l)
 div := $(shell printf "%.0f" $(div))
 
 ifeq ($(playback),shq)
@@ -78,9 +81,11 @@ div := $(shell if [ $(div) -lt 12 ]; then printf "12"; else printf $(div); fi)
 endif
 
 ifeq ($(samplerate),)
-samplerate := $(shell echo "scale=6; $(TIM_BASE)/$(div)" | bc -l)
+samplerate := $(shell echo "scale=1; ($(TIM_BASE)/$(div)) + 1" | bc -l)
 endif
 samplerate := $(shell printf "%.0f" $(samplerate))
+
+$(info Sample rate is ${samplerate}Hz)
 
 OUT := output/$(basename $(notdir $(SOURCE)))
 
