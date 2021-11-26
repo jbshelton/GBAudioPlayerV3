@@ -449,8 +449,8 @@ int main(int argc, const char * argv[])
                 right = (right^0x8000)>>6;
 
                 output[main_pos++] = (((shq_lut->pulse_lut[left][0]&0x0f)<<4)|(shq_lut->pulse_lut[right][0]&0x0f));
-                output[main_pos++] = ((((shq_lut->nw_lut[left][0])<<4)|shq_lut->nw_lut[right][0])&0xcc)|0x12;
                 output[main_pos++] = ((((shq_lut->mv_lut[left][0]&0x07))<<4)|(shq_lut->mv_lut[right][0]&0x07));
+                output[main_pos++] = ((((shq_lut->nw_lut[left][0])<<4)|shq_lut->nw_lut[right][0])&0xcc)|0x12;
 
                 if((main_pos&0x3fff)==0)
                 {
