@@ -337,7 +337,7 @@ int main(int argc, const char * argv[])
     }
 
     fseek(audiof, 0, SEEK_END);
-    size_t audio_size, debug_size; 
+    size_t audio_size;
     int audio_mode = 0;
     uint8_t aud_channels = (uint8_t)atoi(argv[3]);
 
@@ -346,7 +346,6 @@ int main(int argc, const char * argv[])
     if((en_mode = strstr(argv[2], "leg"))!=NULL)
     {
         audio_size = ftell(audiof)/2;
-        debug_size = ftell(audiof);
         audio_mode = 0;
     }
     else if((en_mode = strstr(argv[2], "shq"))!=NULL)
@@ -360,13 +359,11 @@ int main(int argc, const char * argv[])
         {
             audio_size = ftell(audiof);
         }
-        debug_size = ftell(audiof);
         audio_mode = 2;
     }
     else //if((en_mode = strstr(argv[2], "hq"))!=NULL)
     {
         audio_size = ftell(audiof);
-        debug_size = audio_size;
         audio_mode = 1;
     }
     
@@ -477,13 +474,6 @@ int main(int argc, const char * argv[])
 
                 output[main_pos++] = (((shq_lut->pulse_lut[samp][0]&0x0f)<<4)|(shq_lut->mv_lut[samp][0]&0x07));
                 output[main_pos++] = ((shq_lut->nw_lut[samp][0]<<4)|shq_lut->nw_lut[samp][0])|0x11;
-
-                short int conv_samp = shq_lut->amp_lut[samp];
-                uint16_t final_conv = * ((uint16_t *) &conv_samp);
-                
-                uint8_t samp_hi, samp_lo;
-                samp_hi = (uint8_t)((final_conv>>2)^0x80);
-                samp_lo = (uint8_t)((final_conv<<6)&0xc0);
             }
         }
     }

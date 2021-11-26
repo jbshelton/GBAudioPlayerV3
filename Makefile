@@ -1,28 +1,14 @@
 ifneq ($(gbsystem),gbc)
 gbsystem = gb
 TIM_BASE = 262144
-div ?= 16
 SPEED = ss
 FIXER = -v -t "GBAP3DMG" -m 0x19 -p 0 $@
 endif
 
 ifeq ($(gbsystem),gbc)
 TIM_BASE = 524288
-div ?= 32
 SPEED = ds
 FIXER = -C -v -t "GBAP3GBC" -m 0x19 -p 0 $@
-endif
-
-ifeq ($(playback),shq)
-pcm_fmt = s16le
-aud_codec = pcm_s16le
-else
-pcm_fmt = u8
-aud_codec = pcm_u8
-endif
-
-ifeq ($(playback),)
-playback = leg
 endif
 
 ifeq ($(channels),mono)
@@ -32,18 +18,80 @@ AUD_CHANNELS = 2
 channels = stereo
 endif
 
+ifeq ($(playback),shq)
+pcm_fmt = s16le
+aud_codec = pcm_s16le
+ifeq ($(AUD_CHANNELS),1)
+BANKSAMPLES = 8192
+else
+BANKSAMPLES = 5461
+endif
+else
+pcm_fmt = u8
+aud_codec = pcm_u8
+ifeq ($(playback),hq)
+ifeq ($(AUD_CHANNELS),1)
+BANKSAMPLES = 16384
+else
+BANKSAMPLES = 8192
+endif
+endif
+endif
+
+ifeq ($(playback),)
+playback = leg
+ifeq ($(AUD_CHANNELS),1)
+BANKSAMPLES = 32768
+else
+BANKSAMPLES = 16384
+endif
+endif
+
+BANKS ?= 511
+
+ifeq ($(romsize),4)
+BANKS = 255
+ifeq ($(romsize),2)
+BANKS = 127
+ifeq ($(romsize),1)
+BANKS = 63
+endif
+endif
+endif
+
+FFMPEG := ffmpeg -loglevel warning -stats -hide_banner
+
+DURATION := $(shell ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 $(SOURCE))
+
+samples_per_rom = $(shell expr $(BANKSAMPLES) \* $(BANKS))
+
+raw_samplerate = $(shell echo "scale=6; $(samples_per_rom)/$(DURATION)" | bc -l)
+#$(info $$raw_samplerate is [${raw_samplerate}])
+div := $(shell echo "scale=6; $(TIM_BASE)/$(raw_samplerate)" | bc -l)
+#$(info $$div is [${div}])
+div := $(shell printf "%.0f" $(div))
+
+ifeq ($(playback),shq)
+div := $(shell if [ $(div) -lt 16 ]; then printf "16"; else printf $(div); fi)
+else
+div := $(shell if [ $(div) -lt 12 ]; then printf "12"; else printf $(div); fi)
+endif
+
+ifeq ($(samplerate),)
+samplerate := $(shell echo "scale=6; $(TIM_BASE)/$(div)" | bc -l)
+endif
+samplerate := $(shell printf "%.0f" $(samplerate))
+
 OUT := output/$(basename $(notdir $(SOURCE)))
 
 BUILD = output/build
 
-$(shell if [ -d $(OUT) ] then rm $(OUT)/*)
-$(shell if [ -d $(BUILD) ] then rm $(BUILD)/*)
+$(shell if [ -d $(OUT) ]; then rm $(OUT)/*; fi)
+$(shell	if [ -d $(BUILD) ]; then rm $(BUILD)/*; fi)
 
 $(shell mkdir -p $(OUT))
 
 CC ?= clang
-FFMPEG := ffmpeg -loglevel warning -stats -hide_banner
-samplerate ?= $(shell expr $(TIM_BASE) / $(div))
 
 TITLE = "\033[1m\033[36m"
 TITLE_END = "\033[0m"
