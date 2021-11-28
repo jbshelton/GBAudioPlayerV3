@@ -89,12 +89,13 @@ $(info Sample rate is ${samplerate}Hz)
 
 OUT := output/$(basename $(notdir $(SOURCE)))
 
-BUILD = output/build
+BUILD := output/build
 
 $(shell if [ -d $(OUT) ]; then rm $(OUT)/*; fi)
 $(shell	if [ -d $(BUILD) ]; then rm $(BUILD)/*; fi)
 
 $(shell mkdir -p $(OUT))
+$(shell mkdir -p $(BUILD))
 
 CC ?= clang
 
