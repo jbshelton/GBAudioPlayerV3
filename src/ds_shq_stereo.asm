@@ -3,41 +3,44 @@ INCLUDE "hardware.inc"
 SECTION "Timer interrupt", ROM0[$50]
 TimerInterrupt:
 playSample:
-	ld a, [hli]
-	ld d, a
-	or $0f
-	ldh [rNR12], a
-	swap d
-	ld a, d
-	or $0f
-	ldh [rNR22], a
-	ld a, [hli]
-	ld d, a
-	ld a, [hli]
-	ld e, a
-	ld a, $80
-	ldh [rNR50], a
-	ldh [rNR14], a
-	ldh [rNR24], a
-	ld a, e
-	ldh [rNR51], a
-	ld a, d
-	ldh [rNR50], a
-	;41 m cycles
+	bit 7, h 			;2
+	jr z, contSample 	;2/3
+	ld hl, $4001 		;3
+	inc bc 				;2
+contSample:
+	push bc 			;4
+	; 13 m cycles max
 
-	bit 7, h
-	jr z, sampleEnd
-	ld h, $2f
-	inc bc
-	ld [hl], c
-	inc h
-	ld [hl], b
-	ld h, $40
-	inc l
-sampleEnd:
-	pop af
-	ei
-	;all of bank switch takes max 20 m cycles
+	ld a, [hli]			;2
+	ld d, a 			;1
+	or $0f				;2
+	ldh [rNR12], a 		;3
+	swap d 				;2
+	ld a, d 			;1
+	or $0f 				;2
+	ldh [rNR22], a 		;3
+	; this part is 16 m cycles
+
+	; e goes to NR50 and d goes to NR51
+
+	ld sp, $ff26 		;3
+	ld a, [hli] 		;2
+	ld e, a 			;1
+	ld a, [hli] 		;2
+	ld d, a 			;1
+	ld a, $80 			;2
+	ldh [rNR50], a 		;3
+	ldh [rNR24], a 		;3
+	ldh [rNR14], a 		;3
+	push de 			;4
+	ld sp, $3003 		;3
+	ei 					;1
+	; 28 m cycles
+	; Total: 57 m cycles
+	; Plus 5 m cycles for entry is 62 m cycles
+	; still no reliable way to go over 16384Hz on GB and 32768Hz on GBC, but will slightly decrease noise 
+	; because writing to NR50 and NR51 is reduced from 8 m cycles to 4 m cycles
+
 waitSample:
 	jr waitSample
 

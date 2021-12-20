@@ -75,7 +75,11 @@ div := $(shell echo "scale=1; ($(TIM_BASE)/$(raw_samplerate)) + 1" | bc -l)
 div := $(shell printf "%.0f" $(div))
 
 ifeq ($(playback),shq)
+ifeq ($(AUD_CHANNELS),2)
 div := $(shell if [ $(div) -lt 16 ]; then printf "16"; else printf $(div); fi)
+else
+div := $(shell if [ $(div) -lt 14 ]; then printf "14"; else printf $(div); fi)
+endif
 else
 div := $(shell if [ $(div) -lt 12 ]; then printf "12"; else printf $(div); fi)
 endif

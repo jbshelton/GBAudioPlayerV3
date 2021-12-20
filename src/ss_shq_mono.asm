@@ -3,37 +3,41 @@ INCLUDE "hardware.inc"
 SECTION "Timer interrupt", ROM0[$50]
 TimerInterrupt:
 playSample:
-	ld a, [hli]
-	ld d, a
-	or $0f
-	ldh [rNR12], a
-	ld a, d
-	and $0f
-	ld d, a
-	swap d
-	or d
-	ld d, a
-	ld a, [hli]
-	ld e, a
-	ld a, $80
-	ldh [rNR50], a
-	ldh [rNR14], a
-	ld a, e
-	ldh [rNR51], a
-	ld a, d
-	ldh [rNR50], a
+	bit 7, h 			;2
+	jr z, contSample 	;2/3
+	ld h, $4001 		;3
+	inc bc 				;2
+contSample:
+	push bc 			;4
+	; 13 m cycles max
 
-	bit 7, h
-	jr z, sampleEnd
-	ld h, $2f
-	inc bc
-	ld [hl], c
-	inc h
-	ld [hl], b
-	ld h, $40
-sampleEnd:
-	pop af
-	ei
+	ld a, [hli]			;2
+	ld e, a 			;1
+	or $0f				;2
+	ldh [rNR12], a 		;3
+	ld a, e 			;1
+	and $0f 			;2
+	ld e, a 			;1
+	swap e 				;2
+	or e 				;1
+	; this part is 15 m cycles
+
+	; e goes to NR50 and d goes to NR51
+
+	ld sp, $ff26 		;3
+	ld a, [hli] 		;2
+	ld d, a 			;1
+	ld a, $80 			;2
+	ldh [rNR50], a 		;3
+	ldh [rNR14], a 		;3
+	push de 			;4
+	ld sp, $3003 		;3
+	ei 					;1
+	; 22 m cycles
+	; Total: 50 m cycles
+	; Plus 5 m cycles for entry is 55 m cycles
+	; this allows a maximum sample rate of 262144/14 = ~18725Hz on GB and 524288/14 = ~37449Hz on GBC
+
 waitSample:
 	jr waitSample
 
