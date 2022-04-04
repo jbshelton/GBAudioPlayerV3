@@ -2,14 +2,7 @@ INCLUDE "hardware.inc"
 
 SECTION "Timer interrupt", ROM0[$50]
 TimerInterrupt:
-	bit 7, h
-	jr z, contSample
-	ld h, $40
-	inc bc
-contSample:
-	push bc ;saves ld h, nn and inc h
-	ld sp, $3003
-    ld a, [hli]
+	ld a, [hli]
 	ld d, a
 	or e
 	ldh [rNR12], a
@@ -25,12 +18,19 @@ contSample:
 	ldh [rNR14], a
 	ld a, d
 	ldh [rNR50], a
-	ei
+
+	bit 7, h
+	jr z, endSample
+	ld h, $2f
+	inc bc
+	ld [hl], c
+	inc h
+	ld [hl], b
+	ld h, $40
+endSample:
+	reti
 waitSample:
 	jr waitSample
-
-SECTION "HL value", ROM0[$2fff]
-	db $00,$40
 
 SECTION "Header", ROM0[$100]
 
