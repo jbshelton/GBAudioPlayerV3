@@ -53,7 +53,7 @@ Start:
 
 	ld hl, $4000
 	ld bc, $0001
-	ld sp, $3003
+	ld sp, $fffe
 
 	ld a, $e0
 	ldh [rNR13], a
