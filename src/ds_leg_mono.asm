@@ -109,5 +109,7 @@ stallPulse:
 
 	ld e, 2
 
+	ld a, $77
+	ldh [rNR50], a
 	ld a, $11
 	ldh [rNR51], a
