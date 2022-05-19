@@ -42,11 +42,11 @@ TimerInterrupt:
 
 	bit 7, h
 	jr z, sampleEnd
-	ld h, $2f
+	ld h, $30
 	inc bc
-	ld [hl], c
-	inc h
 	ld [hl], b
+	dec h
+	ld [hl], c
 	ld h, $40
 
 sampleEnd:
