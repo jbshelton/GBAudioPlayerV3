@@ -76,7 +76,7 @@ Here's what the full thing should look like \(use this as sort of a template I g
 `make SOURCE="Obligatory Example File.mp3" gbsystem=gb playback=hq channels=stereo`
 
 This should produce an audio ROM for the original Gameboy that uses the HQ playback method in stereo\.
-Additionally, you can override the input sample rate \(to make the audio play faster or slower\) by typing in `samplerate=` and an integer\. Higher rates will play back slower, and lower rates will play back faster\. For example, specifying `samplerate=16000` if the output sample rate is 16,384Hz \(if you run the encoder once to find out\) will cause the audio to play slightly fast since the input sample rate is lower than the rate the Gameboy plays it back at\. I recommend only using slower sample rates than the provided sample rate in order to not overflow the max amount of ROM space\!
+Additionally, you can override the input sample rate \(to make the audio play faster or slower\) by typing in `samplerate=` and an integer\. Higher rates will play back slower, and lower rates will play back faster\. For example, specifying `samplerate=16000` if the output sample rate is 16,384Hz \(if you run the encoder once to find out\) will cause the audio to play slightly fast since the input sample rate is lower than the rate the Gameboy plays it back at\.
 
 ---
 
@@ -85,21 +85,22 @@ Additionally, you can override the input sample rate \(to make the audio play fa
 ---
 
 #### A few things to note
-- None of the encoding methods will work properly on a Gameboy Advance \(and the Gameboy Player by extension\), due to it using a digital method of mixing audio that doesn't emulate the analog behavior properly at all\. I apologize for everyone who only has a GBA :\(
+- At the moment, none of the encoding methods will work properly on a Gameboy Advance \(and the Gameboy Player by extension\), due to it using a digital method of mixing audio that doesn't emulate the analog behavior properly at all\. I apologize for everyone who only has a GBA :\(
 - HQ and SHQ on DMG may sound a bit whiny at lower sample rates \(caused by using a smaller ROM setting or a longer audio track\) due to the method I implemented for reducing noise
-- Legacy uses the least amount of ROM, and SHQ uses the most space\. Specifically, you can only fit slightly less than 1/3rd the amount of stereo SHQ audio in a cartridge compared to stereo Legacy audio\.
+- Legacy uses the least amount of ROM, and SHQ uses the most space\. Specifically, you can only fit slightly less than 1/3rd the amount of stereo SHQ audio in a cartridge compared to stereo Legacy audio\. \(That means that slightly less than 1 minute of SHQ audio fits into the same space that 3 minutes of Legacy audio fits into\.\)
 
 ---
 
 #### Planned updates
-- A max sample rate calculator to cap the manually altered `samplerate` parameter
-- A modified version of Lesserkuma's [256M ROM builder](https://github.com/lesserkuma/256M_ROM_Builder) with a custom menu that allows the audio playback code to fit in the same space as the menu so that 4 8MB audio ROMs can fit onto a 36MB multicart instead of just 3 8MB ROMs
+- A modified version of Lesserkuma's [256M ROM builder](https://github.com/lesserkuma/256M_ROM_Builder) with a custom menu that allows the audio playback code to fit in the same space as the menu so that 4 8MB audio ROMs can fit onto a 32MB multicart instead of just 3 8MB ROMs
 - Deconstruction/debug ROM capability so that anyone can make GBPCM oscilloscope deconstruction videos with either an accurate emulator or real hardware
+- A static thumbnail/album cover to show on the screen while the audio is playing
+- A separate audio encoding mode to allow playback on a Gameboy Advance
+- A max sample rate calculator to cap the manually altered `samplerate` parameter
 
 ---
 
 #### Possible updates
 - A simple pause/play/scrub system that utilizes joypad interrupts
-- A static thumbnail/album cover to show on the screen while the audio is playing
-- TPP1 mapper support \(for emulators only at this point\)
+- TPP1 mapper support \(for emulators only so far\)
 - A rudimentary GUI that has arbitrary path support \(can get the audio file from anywhere on your computer\)

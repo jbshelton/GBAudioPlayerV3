@@ -1,6 +1,6 @@
 # Approximate Timeline
 I've been working on and perfecting my audio player for over a year now\! I think I should have a documentation of my journey somewhere\.
-- July 2020: I first introduce my idea of a high quality audio player to the world in this [video](https://youtu.be/IegCXD3F1YM) I made\. I hadn't even started to program in assembly yet, so I didn't totally know what I was talking about\.
+- July 2020: I first introduce my idea of a high quality audio player to the world in [this video](https://youtu.be/IegCXD3F1YM) I made\. I hadn't even started to program in assembly yet, so I didn't totally know what I was talking about\.
 - September\-October 2020: I get a basic audio player working, which used just the pulse channels\. At the time I couldn't figure out how to get a PCM amplitude of zero without muting the channel, so it only had 14 distinct amplitudes instead of 16\.
 - October\-November 2020: I get the first version of my HQ audio player working\. It only has 58 amplitudes and 6\-bit accuracy due to my channel DAC relative values being incorrect, and because I treated the DACs like they only had 14 amplitudes\.
 - December 2020: I put my first iteration of GBAudioPlayer on Github\. It was written in Java, was a command line interface, was very slow, and only worked on the Gameboy Color due to my horribly unoptimized code and what I thought was a bug that caused HQ audio to be incredibly distorted when played back on a DMG, but fine when played on a GBC\.
