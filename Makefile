@@ -18,6 +18,15 @@ AUD_CHANNELS = 2
 channels = stereo
 endif
 
+ifeq ($(playback),)
+playback = leg
+ifeq ($(AUD_CHANNELS),1)
+BANKSAMPLES = 32768
+else
+BANKSAMPLES = 16384
+endif
+endif
+
 ifeq ($(playback),shq)
 pcm_fmt = s16le
 aud_codec = pcm_s16le
@@ -35,15 +44,6 @@ BANKSAMPLES = 16384
 else
 BANKSAMPLES = 8192
 endif
-endif
-endif
-
-ifeq ($(playback),)
-playback = leg
-ifeq ($(AUD_CHANNELS),1)
-BANKSAMPLES = 32768
-else
-BANKSAMPLES = 16384
 endif
 endif
 
@@ -85,7 +85,7 @@ div := $(shell if [ $(div) -lt 12 ]; then printf "12"; else printf $(div); fi)
 endif
 
 ifeq ($(samplerate),)
-samplerate := $(shell echo "scale=1; ($(TIM_BASE)/$(div)) + 1" | bc -l)
+samplerate := $(shell echo "scale=1; ($(TIM_BASE)/$(div))" | bc -l)
 endif
 samplerate := $(shell printf "%.0f" $(samplerate))
 
